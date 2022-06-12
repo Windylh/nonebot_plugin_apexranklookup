@@ -29,8 +29,9 @@ apexApi = apexApi(config.apex_api_token)
 async def query_rank(event: Event, state: T_State):
     if isinstance(event, MessageEvent):
         try:
-            raw = event.get_plaintext(state).lstrip(".stat").lstrip(".查询").strip().split(" ")
-            if not raw:
+            raw = event.get_plaintext().lstrip(".stat").lstrip(".查询").strip().split(" ")
+            if not raw or raw == ['']:
+                await maps.send("请输入.查询/.stat origin_id 以空格隔开。")
                 return
             if len(raw) > 1:
                 origin_id, platform = raw

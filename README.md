@@ -17,16 +17,20 @@
 ## 使用
 #### .map/.地图
 查看当前大逃杀、竞技场模式轮换地图，以及地图剩余时间。
-
-#### .stat/.查询 origin_id
+![](./image/map.png)
+#### .stat/.查询 origin_id (平台)
 根据origin_id查询玩家信息（id、等级、段位、当前状态）
+
+可查询多平台(PC、PS4、X1)，不添加默认PC
+![](./image/stat.png)
 
 #### .crafting/.复制器
 查询当前复制器轮换物品。
+![](./image/crafting.png)
 
 #### .pd/.猎杀
 查询全平台大逃杀、竞技场猎杀最低分和大师段位以上的人数。
-
+![](./image/pd.png)
 
 ## TODO
 > 中文文本翻译
