@@ -16,7 +16,7 @@ global_config = get_driver().config
 config = Config.parse_obj(global_config)
 
 worker = MatcherGroup(type="message", block=True, priority=10)
-rank = worker.on_startswith((".stat", ".查询"))
+rank = worker.on_command((".stat", ".查询"))
 maps = worker.on_command(".map", aliases={".地图"})
 predator = worker.on_command(".猎杀", aliases={".pd"})
 store = worker.on_command(".复制器", aliases={".crafting"})
