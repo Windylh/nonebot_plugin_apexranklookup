@@ -18,7 +18,7 @@ class apexApi:
         else:
             return "请输入正确的平台(pc,xbox,ps)"
         try:
-            r = requests.get(f"{self.url}/bridge?auth={self.api_key}&player={user_id}&platform={platform}&merge=True&removeMerged=True")
+            r = requests.get(f"{self.url}/bridge?auth={self.api_key}&player={user_id}&platform={platform}&merge=True&removeMerged=True&version=5")
         except Exception:
             return "网络爆炸了，请稍后重试或联系管理员"
         result = json.loads(r.text)
