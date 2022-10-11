@@ -1,6 +1,7 @@
 import requests
 import json
 from nonebot.adapters.onebot.v11 import MessageSegment
+from draw import *
 
 
 class apexApi:
@@ -24,13 +25,7 @@ class apexApi:
         result = json.loads(r.text)
         if result.get("Error"):
             return result.get("Error")
-        msg = f"""Id：{result.get("global").get("name")}
-等级：{result.get("global").get("level")}
-当前段位：{str(MessageSegment.image(result.get("global").get("rank").get("rankImg")))}
-当前分数：{result.get("global").get("rank").get("rankScore")}
-当前竞技场段位：{str(MessageSegment.image(result.get("global").get("arena").get("rankImg")))}
-当前竞技场分数：{result.get("global").get("arena").get("rankScore")}
-当前状态：{result.get("realtime").get("currentStateAsText")}"""
+        msg = str(MessageSegment.image(draw_profile(result)))
         return msg
 
     def map_query(self):
@@ -41,17 +36,7 @@ class apexApi:
         result = json.loads(r.text)
         if result.get("Error"):
             return result.get("Error")
-        msg = f"""大逃杀：
-当前地图：{result.get("battle_royale").get("current").get("map")}
-剩余时间：{result.get("battle_royale").get("current").get("remainingTimer")}
-下一张地图：{result.get("battle_royale").get("next").get("map")}
-积分联赛：
-当前地图：{result.get("ranked").get("current").get("map")}
-下赛季地图：{result.get("ranked").get("next").get("map")}
-竞技场：
-当前地图：{str(MessageSegment.image(result.get("arenas").get("current").get("asset")))}
-剩余时间：{result.get("arenas").get("current").get("remainingTimer")}
-下一张地图：{str(MessageSegment.image(result.get("arenas").get("next").get("asset")))}"""
+        msg = MessageSegment.image(draw_map(result))
         return msg
 
     def predator(self):
@@ -87,4 +72,6 @@ Switch: 最低分 {result.get("AP").get("SWITCH").get("val")}, 大师 {result.ge
 
 
 if __name__ == "__main__":
-    pass
+    api = apexApi("bf82f8986a3f6b04ba33e83f59cd7ffd")
+    api.player_query("Runtzandlean", "PC")
+    # print(api.map_query())
