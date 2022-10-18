@@ -1,7 +1,7 @@
 import requests
 import json
 from nonebot.adapters.onebot.v11 import MessageSegment
-from draw import *
+from .draw import *
 
 
 class apexApi:
