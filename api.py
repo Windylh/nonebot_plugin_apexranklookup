@@ -72,6 +72,6 @@ Switch: 最低分 {result.get("AP").get("SWITCH").get("val")}, 大师 {result.ge
 
 
 if __name__ == "__main__":
-    api = apexApi("bf82f8986a3f6b04ba33e83f59cd7ffd")
-    api.player_query("Runtzandlean", "PC")
+    api = apexApi("")
+    api.player_query("", "PC")
     # print(api.map_query())
