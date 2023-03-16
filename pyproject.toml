@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "nonebot-plugin-apexranklookup"
+version = "0.1.0"
+description = ""
+authors = ["Windylh"]
+readme = "README.md"
+packages = [{include = "nonebot_plugin_apexranklookup"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Pillow = "^9.4.0"
+pydantic = "^1.10.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
