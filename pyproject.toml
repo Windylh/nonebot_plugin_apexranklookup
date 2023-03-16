@@ -10,6 +10,7 @@ packages = [{include = "nonebot_plugin_apexranklookup"}]
 python = "^3.8"
 Pillow = "^9.4.0"
 pydantic = "^1.10.6"
+nonebot = "^1.9.1"
 
 
 [build-system]
