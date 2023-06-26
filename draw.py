@@ -5,11 +5,13 @@ import requests
 import io
 
 dirname, filename = os.path.split(os.path.abspath(__file__))
-font = ImageFont.truetype(f"{dirname}/data/font/SourceHanSansCN-Normal.ttf", 50)
+font = ImageFont.truetype(f"{dirname}/data/font/SourceHanSansCN-Normal.ttf", 80)
 
 
 def image_cache(url):
     filename = url.split("/")[-1]
+    if not filename:
+        filename = "Olympus.png"
     if not os.path.exists(f"{dirname}/data/image/{filename}"):
         with open(f"{dirname}/data/image/{filename}", "wb") as f:
             r = requests.get(url, stream=True)
@@ -29,7 +31,12 @@ def pad_image(images, max_widen):
 
 def draw_rank(img, rank):
     draw = ImageDraw.Draw(img)
-    draw.text(xy=(img.size[0] // 2 - 50, img.size[1] // 2 + 90), text="#" + str(rank), fill='white', font=font)
+    text = "#" + str(rank)
+    if rank > 750:
+        draw.text(xy=((img.size[0]-font.getsize(text)[0]) // 2, (img.size[1]-font.getsize(text)[1]) // 2 + 250), text=text, fill='white', font=font)
+    else:
+        pred_font = ImageFont.truetype(f"{dirname}/data/font/SourceHanSansCN-Normal.ttf", 50)
+        draw.text(xy=((img.size[0]-pred_font.getsize(text)[0]) // 2, (img.size[1]-pred_font.getsize(text)[1]) // 2 + 120), text=text, fill='white', font=pred_font)
     return img
 
 
@@ -38,7 +45,7 @@ def draw_profile(data):
     result = Image.open(f"{dirname}/data/image/base.png")
     result.paste(img_leged, box=(0, 0), mask=img_leged)
     img_rank = image_cache(data.get("global").get("rank").get("rankImg"))
-    if data.get("global").get("rank").get("rankName") == "Apex Predator":
+    if data.get("global").get("rank").get("rankName") in ["Apex Predator", "Master"]:
         img_rank = draw_rank(img_rank, data.get("global").get("rank").get("ladderPosPlatform"))
     # img_rank.show()
     draw = ImageDraw.Draw(result)
@@ -46,18 +53,14 @@ def draw_profile(data):
     img_rank = image_trans(pad_image([img_rank], 150)[0])
     result.paste(img_rank, box=(0, 0), mask=img_rank)
     draw.text(xy=(40, 150), text=str(data.get("global").get("rank").get("rankScore")) + "pt", fill='white', font=profile_font)
-    img_arena = image_cache(data.get("global").get("arena").get("rankImg"))
-    if data.get("global").get("arena").get("rankName") == "Apex Predator":
-        img_arena = draw_rank(img_arena, data.get("global").get("arena").get("ladderPosPlatform"))
-    img_arena = image_trans(pad_image([img_arena], 150)[0])
-    result.paste(img_arena, box=(0, 200), mask=img_arena)
-    draw.text(xy=(40, 350), text=str(data.get("global").get("arena").get("rankScore")) + "pt", fill='white', font=profile_font)
     level_text = f'id： {data.get("global").get("name")}\n等级：{data.get("global").get("level")}\n{data.get("realtime").get("currentStateAsText")}'
-    draw.text(xy=(result.size[0]-200, 0), text=level_text, fill='white', font=profile_font)
+    draw.text(xy=(result.size[0]-draw.textsize(level_text, profile_font)[0], 0), text=level_text, fill='white', font=profile_font)
     badges_text = "\n".join([f'{i.get("name")}:{i.get("value")}' for i in data.get("legends").get("selected").get("gameInfo").get("badges")])
-    draw.text(xy=(result.size[0] - 200, result.size[1] - 150), text="追踪器:\n" + ("无" if not badges_text else badges_text), fill='white', font=profile_font)
+    draw.text(xy=(result.size[0]-draw.textsize(badges_text, profile_font)[0], result.size[1]-draw.textsize(badges_text, profile_font)[1]), text="追踪器:\n" + ("无" if not badges_text else badges_text), fill='white', font=profile_font)
     b = io.BytesIO()
     result.save(b, 'png')
+    with open("test.png", "wb") as f:
+        result.save(f, "png")
     return b.getvalue()
 
 
@@ -70,7 +73,7 @@ def image_trans(image):
 
 def draw_map(data):  # 3840*1200
     images = []
-    map_type = ["battle_royale", "arenas", "ranked", "arenasRanked"]
+    map_type = ["battle_royale", "ranked", "ltm"]
     for index in map_type:
         images.append(image_cache(data.get(index).get("current").get("asset")))
     length = 0  # 空白长图的长
@@ -90,7 +93,7 @@ def draw_map(data):  # 3840*1200
         text = f'模式:{map_type[i]}\n当前地图：{data.get(map_type[i]).get("current").get("map")}\n下张地图：{data.get(map_type[i]).get("next").get("map")}\n剩余时间：{data.get(map_type[i]).get("current").get("remainingTimer")}'
         length += image.size[1]
         # 在图片上写字：位置(x左右，y上下)，文字，颜色，字体
-        draw.text(xy=(0, length - 250), text=text, fill='white', font=font)
+        draw.text(xy=(0, length - draw.textsize(text, font)[1]), text=text, fill='white', font=font)
     result = pad_image([result], 800)[0]
     b = io.BytesIO()
     result.save(b, 'png')

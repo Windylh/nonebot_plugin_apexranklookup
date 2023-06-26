@@ -21,10 +21,10 @@ class apexApi:
         try:
             r = requests.get(f"{self.url}/bridge?auth={self.api_key}&player={user_id}&platform={platform}&merge=True&removeMerged=True&version=5")
         except Exception:
-            return "网络爆炸了，请稍后重试或联系管理员"
+            return "Error:" + "网络爆炸了，请稍后重试或联系管理员"
         result = json.loads(r.text)
         if result.get("Error"):
-            return result.get("Error")
+            return "Error: " + result.get("Error")
         msg = str(MessageSegment.image(draw_profile(result)))
         return msg
 
@@ -52,11 +52,7 @@ PC: 最低分 {result.get("RP").get("PC").get("val")}, 大师 {result.get("RP").
 PS: 最低分 {result.get("RP").get("PS4").get("val")}, 大师 {result.get("RP").get("PS4").get("totalMastersAndPreds")}
 Xbox: 最低分 {result.get("RP").get("X1").get("val")}, 大师 {result.get("RP").get("X1").get("totalMastersAndPreds")}
 Switch: 最低分 {result.get("RP").get("SWITCH").get("val")}, 大师 {result.get("RP").get("SWITCH").get("totalMastersAndPreds")}
-竞技场：
-PC: 最低分 {result.get("AP").get("PC").get("val")}, 大师 {result.get("AP").get("PC").get("totalMastersAndPreds")}
-PS: 最低分 {result.get("AP").get("PS4").get("val")}, 大师 {result.get("AP").get("PS4").get("totalMastersAndPreds")}
-Xbox: 最低分 {result.get("AP").get("X1").get("val")}, 大师 {result.get("AP").get("X1").get("totalMastersAndPreds")}
-Switch: 最低分 {result.get("AP").get("SWITCH").get("val")}, 大师 {result.get("AP").get("SWITCH").get("totalMastersAndPreds")}"""
+"""
         return msg
 
     def store_query(self):
@@ -73,5 +69,6 @@ Switch: 最低分 {result.get("AP").get("SWITCH").get("val")}, 大师 {result.ge
 
 if __name__ == "__main__":
     api = apexApi("")
-    api.player_query("", "PC")
-    # print(api.map_query())
+    # api.player_query("Paradisesssssa", "PC")
+    # api.player_query("TTV_WeThePeople1", "PC")
+    api.map_query()
