@@ -45,7 +45,7 @@ async def query_rank(event: Event, state: T_State):
             if (not raw or raw == ['']) and not user_info.get(event.get_user_id()):
                 await rank.send("请输入.查询/.stat origin_id 平台代码(xbox、ps、pc默认pc) 以空格隔开。")
                 return
-            elif user_info.get(event.get_user_id()):
+            elif (not raw or raw == ['']) and  user_info.get(event.get_user_id()):
                 raw = user_info.get(event.get_user_id())
             if len(raw) > 1:
                 origin_id, platform = raw
